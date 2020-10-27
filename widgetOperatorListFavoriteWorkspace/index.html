@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Wirtualny sklep</title>
+  </head>
+  <body>
+    <div style="width: 1127px; margin: 0 auto;">
+      <!-- widget -->
+      <div id="wirtualny-sklep" api-key="12345" workspace-code="SC"></div>
+      <script src="script.js" defer async></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+          widgetOperatorListFavoriteWorkspace.elementId = 'wirtualny-sklep';
+          widgetOperatorListFavoriteWorkspace.init();
+          widgetOperatorListFavoriteWorkspace.getOperators();
+        });
+      </script>
+      <!-- end widget -->
+    </div>
+  </body>
+</html>
