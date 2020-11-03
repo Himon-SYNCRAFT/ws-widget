@@ -18,6 +18,7 @@
         workspaceName: workspace,
         login: operatorLogin,
         name: operatorName,
+        lastName: operatorLastName,
         statusId: operatorStatus,
         apiKey: apiKey,
     }
@@ -39,6 +40,11 @@
         'width': '100%'
     })
 
+    const headerStyle = objectToStyle({
+        'font-weight': 'bold',
+        'font-size': '1.28571429em',
+    })
+
     const contentStyle = objectToStyle({
         padding: '1em',
         'margin-bottom': 'auto',
@@ -49,10 +55,15 @@
         'border-radius': '0.285714em',
         display: 'flex',
         'flex-direction': 'column',
-        width: 'calc(20% - 1.5em)',
-        'margin-left': '.75em',
-        'margin-right': '.75em',
+        'flex-basis': 'calc(20% - 1.75em)',
+        'flex-grow': 1,
+        'margin': '.75em',
         'font-family': "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+    })
+
+    const smallScreenCardStyle = objectToStyle({
+        'flex-basis': 'calc(100% - 1.75em)',
+        'margin': '.5em',
     })
 
     const buttonStyle = objectToStyle({
@@ -64,6 +75,10 @@
         'font-weight': 'bold',
         'font-size': '1rem',
         'text-decoration': 'none',
+    })
+
+    const smallScreenButtonStyle = objectToStyle({
+        'font-size': '4rem',
     })
 
     const buttonStyleDisabled = objectToStyle({
@@ -85,7 +100,6 @@
     }
 
     function createCard(operator) {
-        console.log(operator)
         const image = document.createElement('img')
         image.className = 'ws-image'
         image.setAttribute('src', operator.avatar)
@@ -98,10 +112,6 @@
 
         const header = document.createElement('div')
         header.className = 'ws-header'
-        header.setAttribute('style', objectToStyle({
-            'font-weight': 'bold',
-            'font-size': '1.28571429em',
-        }))
         header.innerHTML = `${operator.name} ${operator.lastname}`
 
         content.appendChild(header)
@@ -139,7 +149,20 @@
                 }
             })
             .then(function(data) {
-                const css = `.ws-image {${imageStyle}} .ws-content {${contentStyle}} .ws-card {${cardStyle}} .ws-button {${buttonStyle}} .ws-button:hover {${buttonStyleHover}} .ws-button-disabled {${buttonStyleDisabled}}`
+                const css = `
+                    .ws-image {${imageStyle}}
+                    .ws-content {${contentStyle}}
+                    .ws-card {${cardStyle}}
+                    .ws-button {${buttonStyle}}
+                    .ws-button:hover {${buttonStyleHover}}
+                    .ws-button-disabled {${buttonStyleDisabled}}
+                    .ws-header {${headerStyle}}
+                    @media (max-width: 600px) {
+                        .ws-card {${smallScreenCardStyle}}
+                        .ws-button {${smallScreenButtonStyle}}
+                        .ws-header { font-size: 4rem; }
+                    }
+                `
                 const style = document.createElement('style')
 
                 if (style.styleSheet) {
@@ -154,12 +177,13 @@
                 cards.setAttribute('style', objectToStyle({
                     'display': 'flex',
                     'flex-direction': 'row',
+                    'flex-wrap': 'wrap',
                 }))
 
                 if (data.operatorList && data.operatorList.length > 0) {
                     element.appendChild(style)
 
-                    data.operatorList.slice(0, 10).forEach(function(item) {
+                    data.operatorList.forEach(function(item) {
                         cards.appendChild(createCard(item))
                     })
 
