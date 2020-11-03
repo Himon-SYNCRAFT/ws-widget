@@ -159,7 +159,7 @@
                 if (data.operatorList && data.operatorList.length > 0) {
                     element.appendChild(style)
 
-                    data.operatorList.slice(0, 5).forEach(function(item) {
+                    data.operatorList.slice(0, 10).forEach(function(item) {
                         cards.appendChild(createCard(item))
                     })
 
