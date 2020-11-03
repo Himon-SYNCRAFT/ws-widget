@@ -32,7 +32,8 @@
             }).join('&')
     }
 
-    const href = `https://apiwirtualny.eltrox.pl/api/v1/widget/operatorList?${queryString(params)}`
+    // const href = `https://apiwirtualny.eltrox.pl/api/v1/widget/operatorList?${queryString(params)}`
+    const href = `https://apiwirtualny.eltrox.pl/api/v1/widget/getAllOperators?${queryString(params)}`
 
     const imageStyle = objectToStyle({
         'width': '100%'
@@ -65,6 +66,10 @@
         'text-decoration': 'none',
     })
 
+    const buttonStyleDisabled = objectToStyle({
+        'background-color': 'red',
+    })
+
     const buttonStyleHover = objectToStyle({
         'background-color': '#16ab39',
     })
@@ -80,6 +85,7 @@
     }
 
     function createCard(operator) {
+        console.log(operator)
         const image = document.createElement('img')
         image.className = 'ws-image'
         image.setAttribute('src', operator.avatar)
@@ -101,10 +107,18 @@
         content.appendChild(header)
 
         const button = document.createElement('a')
-        button.setAttribute('href', `https://wirtualny.eltrox.pl/chat/operator/${operator.operatorId}`)
+
+        if (operator.statusId == 1) {
+            button.setAttribute('href', `https://wirtualny.eltrox.pl/chat/operator/${operator.operatorId}`)
+            button.className = 'ws-button'
+            button.innerHTML = 'Rozpocznij konsultację online'
+        } else {
+            button.setAttribute('href', `https://wirtualny.eltrox.pl/company/1`)
+            button.innerHTML = 'Konsultant niedostępny'
+            button.className = 'ws-button ws-button-disabled'
+        }
+
         button.setAttribute('target', '_blank')
-        button.className = 'ws-button'
-        button.innerHTML = 'Rozpocznij konsultację online'
 
         const card = document.createElement('div')
         card.className = 'ws-card'
@@ -125,7 +139,7 @@
                 }
             })
             .then(function(data) {
-                const css = `.ws-image {${imageStyle}} .ws-content {${contentStyle}} .ws-card {${cardStyle}} .ws-button {${buttonStyle}} .ws-button:hover {${buttonStyleHover}}`
+                const css = `.ws-image {${imageStyle}} .ws-content {${contentStyle}} .ws-card {${cardStyle}} .ws-button {${buttonStyle}} .ws-button:hover {${buttonStyleHover}} .ws-button-disabled {${buttonStyleDisabled}}`
                 const style = document.createElement('style')
 
                 if (style.styleSheet) {
